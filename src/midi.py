@@ -16,7 +16,7 @@ MyMIDI.addTempo(track,time,120)
 
 # Add a note. addNote expects the following information:
 track = 0
-channel = 0
+channel = 51
 pitch = 60
 time = 0
 duration = 10

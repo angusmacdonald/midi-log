@@ -1,6 +1,9 @@
 import re
 import logging
+import os
 
+MAX_FILE_SIZE=50000
+FILE_PATH='..' + os.sep + 'tests' + os.sep + 'logExample.log'
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -27,10 +30,10 @@ if __name__ == '__main__':
 
 	logging.debug("Starting.")
 
-	FILE = open('tests\logExample.log', 'r')
+	FILE = open(FILE_PATH, 'r')
 
 	i = 0
-	while i < 500000:
+	while i < MAX_FILE_SIZE:
 		line = FILE.readline()
 
 		if line == "": # Cuts off if end of file reached
@@ -41,7 +44,8 @@ if __name__ == '__main__':
 		logging.debug("FQ Package name: {0}".format(package))
 
 		splitPackage = splitPackageNames(package)
-
+		
 		logging.debug("Package name array: {0}".format(splitPackage))
+
 
 
