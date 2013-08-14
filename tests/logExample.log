@@ -1,0 +1,7 @@
+com.example.Main[INFO|main|08:26:14]: Starting.
+com.example.packageonly[INFO] Generic comment.
+java.awt.mixing.Container[FINE|main|08:26:20]: I am a standard java class.
+com.example.deeper.package.Runner Main[INFO|main|08:26:14]: I am deeper in the package structure.
+com.example.deeper.otherpackage Main[INFO|main|08:26:14]: I am in a different child package. Space coming.
+
+com.example.deepener.hello.HelloWorld Main[INFO|main|08:26:14]: Hello!
