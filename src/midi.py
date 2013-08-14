@@ -16,6 +16,11 @@ class midiFile:
 		self.maxDepth = maxDepth
 
 	def addNote(self, depth):
+		"""	Adds a new note to the MIDI file.
+			Increments the time by 1 on addition of every note.
+
+			depth: Package structure depth. Used to determine the pitch of the note.
+		"""
 		track = 0
 		channel = 20
 		pitch = getPitch(depth, self.maxDepth)
@@ -29,13 +34,17 @@ class midiFile:
 		self.time+=1
 
 	def writeFile(self):
+		""" Write the current state of the MIDI file to disk.
+		"""
 		binfile = open("../output/output.mid", 'wb')
 		self.state.writeFile(binfile)
 		binfile.close()
 
-#Changes pitch based on a given package structure depth
-#Pitch is between 0-127
+
 def getPitch(depth, maxDepth):
+	"""	Changes pitch based on a given package structure depth
+		Pitch is between 0-127.
+	"""
 	pitch = (float(depth) / maxDepth) * 127
 	logging.debug("Pitch: {0}, Depth: {1}, Max: {2}".format(pitch, depth, maxDepth))
 	return pitch
