@@ -44,8 +44,9 @@ if __name__ == '__main__':
 		logging.debug("FQ Package name: {0}".format(package))
 
 		splitPackage = splitPackageNames(package)
-		
-		logging.debug("Package name array: {0}".format(splitPackage))
+		depth = len(splitPackage)
+		isJavaCore = splitPackage[0] == "java"
+		logging.debug("Package name array: {0} (depth={1}, isJava={2})".format(splitPackage, depth, isJavaCore))
 
 
 
