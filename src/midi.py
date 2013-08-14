@@ -1,31 +1,30 @@
-#Import the library
-
 from midiutil.MidiFile import MIDIFile
 
-# Create the MIDIFile Object with 1 track
-MyMIDI = MIDIFile(1)
+import logging
 
 # Tracks are numbered from zero. Times are measured in beats.
-
 track = 0   
 time = 0
 
-# Add track name and tempo.
-MyMIDI.addTrackName(track,time,"Sample Track")
-MyMIDI.addTempo(track,time,120)
+class midiFile:
 
-# Add a note. addNote expects the following information:
-track = 0
-channel = 51
-pitch = 60
-time = 0
-duration = 10
-volume = 100
+	def __init__(self, trackName):
+		self.state = MIDIFile(1) #Num of tracksself.self.state.addTrackName(track,time,trackName)
+		self.state.addTempo(track,time,120)
 
-# Now add the note.
-MyMIDI.addNote(track,channel,pitch,time,duration,volume)
+	def addNote(self):
+		track = 0
+		channel = 20
+		pitch = 60
+		time = 0
+		duration = 1
+		volume = 100
 
-# And write it to disk.
-binfile = open("output.mid", 'wb')
-MyMIDI.writeFile(binfile)
-binfile.close()
+		logging.debug("Adding note.")
+
+		self.state.addNote(track,channel,pitch,time,duration,volume)
+
+	def writeFile(self):
+		binfile = open("../output/output.mid", 'wb')
+		self.state.writeFile(binfile)
+		binfile.close()

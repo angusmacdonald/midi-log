@@ -2,8 +2,11 @@ import re
 import logging
 import os
 
+import midi
+
 MAX_FILE_SIZE=50000
 FILE_PATH='..' + os.sep + 'tests' + os.sep + 'logExample.log'
+TRACK_NAME="Log File MIDI"
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -32,6 +35,8 @@ if __name__ == '__main__':
 
 	FILE = open(FILE_PATH, 'r')
 
+	midiTrack = midi.midiFile(TRACK_NAME)
+
 	i = 0
 	while i < MAX_FILE_SIZE:
 		line = FILE.readline()
@@ -48,5 +53,7 @@ if __name__ == '__main__':
 		isJavaCore = splitPackage[0] == "java"
 		logging.debug("Package name array: {0} (depth={1}, isJava={2})".format(splitPackage, depth, isJavaCore))
 
+		midiTrack.addNote()
 
+	midiTrack.writeFile()
 
