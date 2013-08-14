@@ -24,7 +24,7 @@ def splitPackageNames(package):
 if __name__ == '__main__':
 
 	print "Starting"
-	FILE = open('tests\logExample.log', 'r')
+	FILE = open('..\tests\logExample.log', 'r')
 
 	i = 0
 	while i < 500000:
