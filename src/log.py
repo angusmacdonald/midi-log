@@ -1,5 +1,5 @@
 import re
-
+import logging
 
 
 def getPackageName(line):
@@ -23,8 +23,11 @@ def splitPackageNames(package):
 
 if __name__ == '__main__':
 
-	print "Starting"
-	FILE = open('..\tests\logExample.log', 'r')
+	logging.basicConfig(level=logging.DEBUG)
+
+	logging.debug("Starting.")
+
+	FILE = open('tests\logExample.log', 'r')
 
 	i = 0
 	while i < 500000:
@@ -35,9 +38,10 @@ if __name__ == '__main__':
 
 		package = getPackageName(line)
 
-		print package
+		logging.debug("FQ Package name: {0}".format(package))
 
 		splitPackage = splitPackageNames(package)
 
-		print splitPackage
+		logging.debug("Package name array: {0}".format(splitPackage))
+
 
