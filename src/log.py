@@ -43,7 +43,9 @@ if __name__ == '__main__':
 
 		if line == "": # Cuts off if end of file reached
 			break
-
+		if line == "\n":
+			continue
+		
 		package = getPackageName(line)
 
 		logging.debug("FQ Package name: {0}".format(package))
