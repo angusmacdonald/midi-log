@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 	FILE = open(FILE_PATH, 'r')
 
-	midiTrack = midi.midiFile(TRACK_NAME)
+	midiTrack = midi.midiFile(TRACK_NAME, 6) #TODO depth
 
 	i = 0
 	while i < MAX_FILE_SIZE:
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 		isJavaCore = splitPackage[0] == "java"
 		logging.debug("Package name array: {0} (depth={1}, isJava={2})".format(splitPackage, depth, isJavaCore))
 
-		midiTrack.addNote()
+		midiTrack.addNote(depth)
 
 	midiTrack.writeFile()
 
