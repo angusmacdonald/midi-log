@@ -6,6 +6,7 @@ import midi
 
 MAX_FILE_SIZE=50000
 FILE_PATH='..' + os.sep + 'tests' + os.sep + 'logExample.log'
+OUTPUT_PATH='..' + os.sep + 'output' + os.sep + 'output.mid'
 TRACK_NAME="Log File MIDI"
 
 def getPackageName(line):
@@ -45,7 +46,7 @@ if __name__ == '__main__':
 			break
 		if line == "\n":
 			continue
-		
+
 		package = getPackageName(line)
 
 		logging.debug("FQ Package name: {0}".format(package))
@@ -57,5 +58,5 @@ if __name__ == '__main__':
 
 		midiTrack.addNote(depth)
 
-	midiTrack.writeFile()
+	midiTrack.writeFile(OUTPUT_PATH)
 

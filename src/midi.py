@@ -5,11 +5,21 @@ import logging
 # Tracks are numbered from zero. Times are measured in beats.
 track = 0  
 
-#Documentation at: http://www.emergentmusics.org/mididutil-class-reference
 class midiFile:
+	"""
+		Allows MIDI files to be gradually built up.
+
+		On creation, a MIDI file track is created, and notes are added through calls
+		to addNote.
+
+		The file can be saved through a call to writeFile.
+
+		More information on the library being used at:
+			http://www.emergentmusics.org/mididutil-class-reference
+	"""
 
 	def __init__(self, trackName, maxDepth):
-		self.state = MIDIFile(1) #Num of tracksself.self.state.addTrackName(track,time,trackName)
+		self.state = MIDIFile(1) #Number of tracks.
 		
 		self.time = 0
 		self.state.addTempo(track,self.time,120)
@@ -33,10 +43,12 @@ class midiFile:
 
 		self.time+=1
 
-	def writeFile(self):
+	def writeFile(self, savePath):
 		""" Write the current state of the MIDI file to disk.
+
+			savePath: Name+Path of the MIDI file to be saved.
 		"""
-		binfile = open("../output/output.mid", 'wb')
+		binfile = open(savePath, 'wb')
 		self.state.writeFile(binfile)
 		binfile.close()
 
