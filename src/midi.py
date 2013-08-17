@@ -2,8 +2,6 @@ from midiutil.MidiFile import MIDIFile
 
 import logging
 
-# Tracks are numbered from zero. Times are measured in beats.
-track = 0  
 
 class midiFile:
 	"""
@@ -22,8 +20,10 @@ class midiFile:
 		self.state = MIDIFile(1) #Number of tracks.
 		
 		self.time = 0
-		self.state.addTempo(track,self.time,120)
+		self.track = 0
+		self.state.addTempo(self.track,self.time,200)
 		self.maxDepth = maxDepth
+		
 
 	def addNote(self, depth):
 		"""	Adds a new note to the MIDI file.
@@ -31,15 +31,15 @@ class midiFile:
 
 			depth: Package structure depth. Used to determine the pitch of the note.
 		"""
-		track = 0
-		channel = 20
+
+		channel = 0
 		pitch = getPitch(depth, self.maxDepth)
 		duration = 1
 		volume = 127
 
 		logging.debug("Adding note.")
-
-		self.state.addNote(track,channel,pitch,self.time,duration,volume)
+		self.state.addProgramChange(self.track,channel, self.time, 96)
+		self.state.addNote(0,channel,pitch,self.time,duration,volume)
 
 		self.time+=1
 
