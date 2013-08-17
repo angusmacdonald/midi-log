@@ -28,6 +28,14 @@ def splitPackageNames(package):
 
 	return names
 
+def getInstrument(packageName, instrumenting):
+	for key in instrumenting:
+		logging.info("Key is {0}, packageName is {1}".format(key, packageName))
+		if packageName.startswith(key):
+			logging.info("Selected instrument {0}".format(instrumenting[key]))
+			return instrumenting[key]
+	return 1
+
 if __name__ == '__main__':
 
 	logging.basicConfig(level=logging.DEBUG)
@@ -35,6 +43,8 @@ if __name__ == '__main__':
 	logging.debug("Starting.")
 
 	FILE = open(FILE_PATH, 'r')
+
+	instrumenting = {'com.example.project.membership': 40, 'com.example.project.util': 23, 'java': 100}
 
 	midiTrack = midi.midiFile(TRACK_NAME, 6) #TODO depth
 
@@ -49,6 +59,9 @@ if __name__ == '__main__':
 
 		package = getPackageName(line)
 
+
+		intstrument = getInstrument(package, instrumenting)
+
 		logging.debug("FQ Package name: {0}".format(package))
 
 		splitPackage = splitPackageNames(package)
@@ -56,7 +69,7 @@ if __name__ == '__main__':
 		isJavaCore = splitPackage[0] == "java"
 		logging.debug("Package name array: {0} (depth={1}, isJava={2})".format(splitPackage, depth, isJavaCore))
 
-		midiTrack.addNote(depth)
+		midiTrack.addNote(depth, intstrument)
 
 	midiTrack.writeFile(OUTPUT_PATH)
 

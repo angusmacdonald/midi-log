@@ -25,7 +25,7 @@ class midiFile:
 		self.maxDepth = maxDepth
 		
 
-	def addNote(self, depth):
+	def addNote(self, depth, instrument):
 		"""	Adds a new note to the MIDI file.
 			Increments the time by 1 on addition of every note.
 
@@ -37,8 +37,8 @@ class midiFile:
 		duration = 1
 		volume = 127
 
-		logging.debug("Adding note.")
-		self.state.addProgramChange(self.track,channel, self.time, 96)
+		logging.debug("Adding note, with instrument {0}".format(instrument))
+		self.state.addProgramChange(self.track,channel, self.time, instrument)
 		self.state.addNote(0,channel,pitch,self.time,duration,volume)
 
 		self.time+=1
