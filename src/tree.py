@@ -126,12 +126,12 @@ def getDepth(package):
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.INFO)
 
-	tree = Tree()
+	tree = PackageTree()
 	tree.add('com.package.test.structure')
 	tree.add('com.package.util.security')
 
 	print "Tree state:"
 	tree.printState()
-	print "Instrument: " + str(tree.getInstrumentAtDepth(['com','package', 'util'], 2))
+	print "Instrument: " + str(tree.getInstrumentAtDepth('com.package.util', 2))
 
 	print "Largest depth: " + str(tree.getLargestDepth())
