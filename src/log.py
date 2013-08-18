@@ -57,6 +57,9 @@ class midiLogger:
 	def create(self, pathToWriteTo, bpm):
 		self.__setUpInstrumentation()
 		self.__createMidiFile(pathToWriteTo,bpm)
+	def setInstruments(self, packageToInstrument):
+		for key, value in packageToInstrument:
+			self.tree.setCustomInstrument(key, value)
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -79,6 +82,7 @@ if __name__ == '__main__':
 	logging.debug("Starting.")
 
 	parser = midiLogger(FILE_PATH, 4)
+	parser.setInstruments(instruments)
 
 	parser.create(OUTPUT_PATH, 500)
 
