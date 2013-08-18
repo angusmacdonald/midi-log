@@ -11,6 +11,8 @@ OUTPUT_PATH='..' + os.sep + 'output' + os.sep + 'output.mid'
 TRACK_NAME="Log File MIDI"
 
 class midiLogger:
+	''' 
+	'''
 	def __init__(self, filePath, instrumentDepth):
 		self.filePath = filePath
 		self.instrumentDepth = instrumentDepth
