@@ -12,7 +12,7 @@ class PackageTree:
 		in the sub-packages of this (at depth 4).
 	'''
 
-	def __init__(self, instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]):
+	def __init__(self, instruments = [18, 26, 32, 40, 48, 56, 66, 78, 88, 97]):
 		self.root = None
 		self.instruments = instruments
 		self.customInstrument = dict()
