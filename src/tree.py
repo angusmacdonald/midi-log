@@ -1,7 +1,6 @@
 import logging
 import re
 
-instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]
 
 class PackageTree:
 	'''	A tree of package names, where each package name also has a MIDI instrument number attached. 
@@ -13,8 +12,9 @@ class PackageTree:
 		in the sub-packages of this (at depth 4).
 	'''
 
-	def __init__(self):
+	def __init__(self, instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]):
 		self.root = None
+		self.instruments = instruments
 	def add(self, packageName):
 		'''	Add a FQ package to the tree. This will be parsed into individual package names in the tree.
 
@@ -27,7 +27,7 @@ class PackageTree:
 		parent = self.root
 		for name in packageNamesArray[1:]:
 			if not parent.hasChild(name):
-				parent.addChild(name)
+				parent.addChild(name, self.instruments)
 			parent = parent.getChild(name)
 
 	def __getLargestDepth(self, node):
@@ -105,7 +105,7 @@ class TreeNode:
 		self.instrument = instrument
 	def hasChild(self, key):
 		return key in self.children
-	def addChild(self, value):
+	def addChild(self, value, instruments):
 		instrumentNumber = len(self.children)
 		instrument = 0
 		if instrumentNumber > len(instruments):
