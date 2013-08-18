@@ -15,6 +15,7 @@ class PackageTree:
 	def __init__(self, instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]):
 		self.root = None
 		self.instruments = instruments
+		self.customInstrument = dict()
 	def add(self, packageName):
 		'''	Add a FQ package to the tree. This will be parsed into individual package names in the tree.
 
@@ -55,6 +56,12 @@ class PackageTree:
 
 			depth: If the depth is greater than this package name, use the instrument at the deepest traversed node.
 		'''
+		
+		customInstrument = self.getCustomInstrument(package)
+
+		if customInstrument is not None:
+			return customInstrument
+
 		if self.root is None:
 			return 0
 
@@ -90,6 +97,21 @@ class PackageTree:
 		for x in range (0, depth):
 			spacing = spacing + " "
 		return spacing + node.data + " (i:" + str(node.instrument) + ")"
+
+	def setCustomInstrument(self, package, instrument):
+		''' Override any instrument specified in the tree with this custom instrument.
+			Has to be an exact match on a specific package.
+		'''
+		self.customInstrument[package] = instrument
+	def getCustomInstrument(self, package):
+		''' Gets the instrument to be used by this package. Will be none if no instrument was specified through
+			setCustomInstrument().
+		'''
+		if package in self.customInstrument:
+			return self.customInstrument[package]
+		else :
+			return None
+
 	def __print(self,node, depth):
 		if node is not None:
 			print self.__getWithDepth(node, depth)
