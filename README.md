@@ -9,4 +9,4 @@ The package structure of the log message is used to determine the tone and pitch
 
 ### Current Status
 
-Incomplete.
+Currently supports parsing of a basic single-line java logger, where the package name is the first part of the log message.
