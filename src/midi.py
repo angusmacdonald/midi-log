@@ -16,12 +16,12 @@ class midiFile:
 			http://www.emergentmusics.org/mididutil-class-reference
 	"""
 
-	def __init__(self, trackName, maxDepth):
+	def __init__(self, trackName, maxDepth, bpm):
 		self.state = MIDIFile(1) #Number of tracks.
 		
 		self.time = 0
 		self.track = 0
-		self.state.addTempo(self.track,self.time,200)
+		self.state.addTempo(self.track,self.time,bpm)
 		self.maxDepth = maxDepth
 		
 

@@ -14,7 +14,7 @@ class midiLogger:
 	def __init__(self, filePath, instrumentDepth):
 		self.filePath = filePath
 		self.instrumentDepth = instrumentDepth
-		self.tree = tree.Tree()
+		self.tree = tree.PackageTree()
 	def __setUpInstrumentation(self):
 		FILE = open(self.filePath, 'r')
 
@@ -30,10 +30,10 @@ class midiLogger:
 			package = getPackageName(line)
 
 			self.tree.add(package)
-	def __createMidiFile(self, pathToWriteTo):
+	def __createMidiFile(self, pathToWriteTo, bpm):
 		FILE = open(FILE_PATH, 'r')
 
-		midiTrack = midi.midiFile(TRACK_NAME, self.tree.getLargestDepth())
+		midiTrack = midi.midiFile(TRACK_NAME, self.tree.getLargestDepth(), bpm)
 
 		i = 0
 		while i < MAX_FILE_SIZE:
@@ -51,9 +51,9 @@ class midiLogger:
 			midiTrack.addNote(depth, self.tree.getInstrumentAtDepth(package, self.instrumentDepth))
 
 		midiTrack.writeFile(pathToWriteTo)
-	def create(self, pathToWriteTo):
+	def create(self, pathToWriteTo, bpm):
 		self.__setUpInstrumentation()
-		self.__createMidiFile(pathToWriteTo)
+		self.__createMidiFile(pathToWriteTo,bpm)
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -77,5 +77,5 @@ if __name__ == '__main__':
 
 	parser = midiLogger(FILE_PATH, 2)
 
-	parser.create(OUTPUT_PATH)
+	parser.create(OUTPUT_PATH, 100)
 
