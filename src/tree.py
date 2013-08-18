@@ -1,10 +1,15 @@
+import logging
+
+instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]
+
 class Tree:
+
 	def __init__(self):
 		self.root = None
 	def add(self, packageNames):
 
 		if self.root is None:
-			self.root = TreeNode(packageNames[0])
+			self.root = TreeNode(packageNames[0], 0)
 
 		parent = self.root
 		for name in packageNames[1:]:
@@ -31,27 +36,32 @@ class Tree:
 
 		return self.__getDepth(self.root)
 
-	def __getWithDepth(self, data, depth):
+	def __getWithDepth(self, node, depth):
 		spacing = ""
 		for x in range (0, depth):
 			spacing = spacing + " "
-		return spacing + data
+		return spacing + node.data + " (i:" + str(node.instrument) + ")"
 	def __print(self,node, depth):
 		if node is not None:
-			print self.__getWithDepth(node.data, depth)
+			print self.__getWithDepth(node, depth)
 		for child in node.children.values():
 			self.__print(child, depth+1)
 	def printState(self):
 		self.__print(self.root, 0)
 
 class TreeNode:
-	def __init__(self, value):
+	def __init__(self, value, instrument):
 		self.data = value
 		self.children = dict()
+		self.instrument = instrument
 	def hasChild(self, key):
 		return key in self.children
 	def addChild(self, value):
-		self.children[value] = TreeNode(value)
+		instrument = len(self.children)
+		if instrument > len(instruments):
+			logging.warning("Not enough instruments available for unique package.")
+			instrument = 0
+		self.children[value] = TreeNode(value, instrument)
 	def getChild(self, key):
 		return self.children[key]
 
