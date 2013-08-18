@@ -37,7 +37,7 @@ class midiFile:
 		duration = 1
 		volume = 127
 
-		logging.debug("Adding note, with instrument {0}".format(instrument))
+		logging.info("Adding note, with instrument {0}".format(instrument))
 		self.state.addProgramChange(self.track,channel, self.time, instrument)
 		self.state.addNote(0,channel,pitch,self.time,duration,volume)
 

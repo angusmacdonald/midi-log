@@ -1,4 +1,5 @@
 import logging
+import re
 
 instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]
 
@@ -6,13 +7,14 @@ class Tree:
 
 	def __init__(self):
 		self.root = None
-	def add(self, packageNames):
+	def add(self, packageName):
 
+		packageNamesArray = splitPackageNames(packageName)
 		if self.root is None:
-			self.root = TreeNode(packageNames[0], 0)
+			self.root = TreeNode(packageNamesArray[0], 0)
 
 		parent = self.root
-		for name in packageNames[1:]:
+		for name in packageNamesArray[1:]:
 			if not parent.hasChild(name):
 				parent.addChild(name)
 			parent = parent.getChild(name)
@@ -36,9 +38,11 @@ class Tree:
 
 		return self.__getLargestDepth(self.root)
 
-	def getInstrumentAtDepth(self, packageNames, depth):
+	def getInstrumentAtDepth(self, package, depth):
 		if self.root is None:
 			return 0
+
+		packageNames = splitPackageNames(package)
 
 		instrument = 0
 		currentDepth = 0
@@ -96,12 +100,19 @@ class TreeNode:
 	def getChild(self, key):
 		return self.children[key]
 
+def splitPackageNames(package):
+	names = re.split('[ .]', package)
+	return names
+def getDepth(package):
+	return len(splitPackageNames(package))
+
+
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.INFO)
 
 	tree = Tree()
-	tree.add(['com','package', 'test', 'structure'])
-	tree.add(['com','package', 'util', 'security'])
+	tree.add('com.package.test.structure')
+	tree.add('com.package.util.security')
 
 	print "Tree state:"
 	tree.printState()

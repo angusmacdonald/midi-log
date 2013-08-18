@@ -3,11 +3,54 @@ import logging
 import os
 
 import midi
+import tree
 
 MAX_FILE_SIZE=50000
 FILE_PATH='..' + os.sep + 'tests' + os.sep + 'logExample.log'
 OUTPUT_PATH='..' + os.sep + 'output' + os.sep + 'output.mid'
 TRACK_NAME="Log File MIDI"
+
+class midiLogger:
+	def __init__(self, filePath, instrumentDepth):
+		self.filePath = filePath
+		self.instrumentDepth = instrumentDepth
+		self.tree = tree.Tree()
+	def setUpInstrumentation(self):
+		FILE = open(self.filePath, 'r')
+
+		i = 0
+		while i < MAX_FILE_SIZE:
+			line = FILE.readline()
+
+			if line == "": # Cuts off if end of file reached
+				break
+			if line == "\n":
+				continue
+
+			package = getPackageName(line)
+
+			self.tree.add(package)
+	def createMidiFile(self, pathToWriteTo):
+		FILE = open(FILE_PATH, 'r')
+
+		midiTrack = midi.midiFile(TRACK_NAME, self.tree.getLargestDepth())
+
+		i = 0
+		while i < MAX_FILE_SIZE:
+			line = FILE.readline()
+
+			if line == "": # Cuts off if end of file reached
+				break
+			if line == "\n":
+				continue
+
+			package = getPackageName(line)
+
+			depth = tree.getDepth(package)
+
+			midiTrack.addNote(depth, self.tree.getInstrumentAtDepth(package, self.instrumentDepth))
+
+		midiTrack.writeFile(pathToWriteTo)
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -23,53 +66,15 @@ def getPackageName(line):
     
 	return package
 
-def splitPackageNames(package):
-	names = re.split('[ .]', package)
-
-	return names
-
-def getInstrument(packageName, instrumenting):
-	for key in instrumenting:
-		logging.info("Key is {0}, packageName is {1}".format(key, packageName))
-		if packageName.startswith(key):
-			logging.info("Selected instrument {0}".format(instrumenting[key]))
-			return instrumenting[key]
-	return 1
-
 if __name__ == '__main__':
 
-	logging.basicConfig(level=logging.DEBUG)
+	logging.basicConfig(level=logging.INFO)
 
 	logging.debug("Starting.")
 
-	FILE = open(FILE_PATH, 'r')
+	obj = midiLogger(FILE_PATH, 2)
 
-	instrumenting = {'com.example.project.membership': 40, 'com.example.project.util': 23, 'java': 100}
+	obj.setUpInstrumentation()
 
-	midiTrack = midi.midiFile(TRACK_NAME, 6) #TODO depth
-
-	i = 0
-	while i < MAX_FILE_SIZE:
-		line = FILE.readline()
-
-		if line == "": # Cuts off if end of file reached
-			break
-		if line == "\n":
-			continue
-
-		package = getPackageName(line)
-
-
-		intstrument = getInstrument(package, instrumenting)
-
-		logging.debug("FQ Package name: {0}".format(package))
-
-		splitPackage = splitPackageNames(package)
-		depth = len(splitPackage)
-		isJavaCore = splitPackage[0] == "java"
-		logging.debug("Package name array: {0} (depth={1}, isJava={2})".format(splitPackage, depth, isJavaCore))
-
-		midiTrack.addNote(depth, intstrument)
-
-	midiTrack.writeFile(OUTPUT_PATH)
+	obj.createMidiFile(OUTPUT_PATH)
 
