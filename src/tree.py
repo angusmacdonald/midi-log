@@ -3,12 +3,23 @@ import re
 
 instruments = [0, 14, 18, 26, 32, 40, 48, 56, 66, 78, 88, 97]
 
-class Tree:
+class PackageTree:
+	'''	A tree of package names, where each package name also has a MIDI instrument number attached. 
+		The instrument number is unique amongst packages sharing the same parent package.
+
+		It is intended that for a given package you can use getInstrumentAtDepth() to get the instrument 
+		to be used for that package and all sub-packages. I.E. If you have a common package structure where
+		everything begins with 'org.company.product', then the instruments will be selected from the instruments
+		in the sub-packages of this (at depth 4).
+	'''
 
 	def __init__(self):
 		self.root = None
 	def add(self, packageName):
+		'''	Add a FQ package to the tree. This will be parsed into individual package names in the tree.
 
+			packageName: e.g. 'com.company.product.other'
+		'''
 		packageNamesArray = splitPackageNames(packageName)
 		if self.root is None:
 			self.root = TreeNode(packageNamesArray[0], 0)
@@ -20,7 +31,6 @@ class Tree:
 			parent = parent.getChild(name)
 
 	def __getLargestDepth(self, node):
-		
 		largestDepth = 0;
 		for child in node.children.values():
 			childDepth = self.__getLargestDepth(child)
@@ -31,6 +41,7 @@ class Tree:
 		return largestDepth + 1
 
 	def getLargestDepth(self):
+		''' Get the depth of this tree. '''
 		node = self.root
 
 		if self.root is None:
@@ -39,6 +50,11 @@ class Tree:
 		return self.__getLargestDepth(self.root)
 
 	def getInstrumentAtDepth(self, package, depth):
+		''' Get the instrument to be used for the given FQ package name, by selecting the instrument at the
+			given depth in this package name.
+
+			depth: If the depth is greater than this package name, use the instrument at the deepest traversed node.
+		'''
 		if self.root is None:
 			return 0
 
