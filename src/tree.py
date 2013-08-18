@@ -11,6 +11,26 @@ class Tree:
 			if not parent.hasChild(name):
 				parent.addChild(name)
 			parent = parent.getChild(name)
+
+	def __getDepth(self, node):
+		
+		largestDepth = 0;
+		for child in node.children.values():
+			childDepth = self.__getDepth(child)
+
+			if childDepth > largestDepth:
+				largestDepth = childDepth
+
+		return largestDepth + 1
+
+	def getDepth(self):
+		node = self.root
+
+		if self.root is None:
+			return 0
+
+		return self.__getDepth(self.root)
+
 	def __getWithDepth(self, data, depth):
 		spacing = ""
 		for x in range (0, depth):
@@ -40,3 +60,5 @@ if __name__ == '__main__':
 	tree.add(['com','package', 'test', 'structure'])
 	tree.add(['com','package', 'util', 'security'])
 	tree.printState()
+
+	print tree.getDepth()
