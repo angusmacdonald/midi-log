@@ -33,10 +33,12 @@ class midiLogger:
 
 			self.tree.add(package)
 		self.tree.printState()
-	def __createMidiFile(self, pathToWriteTo, bpm):
+	def __createMidiFile(self, pathToWriteTo, bpm, minPitch, maxPitch):
 		FILE = open(FILE_PATH, 'r')
 
 		midiTrack = midi.midiFile(TRACK_NAME, self.tree.getLargestDepth(), bpm)
+
+		midiTrack.setPitchRange(minPitch, maxPitch)
 
 		i = 0
 		while i < MAX_FILE_SIZE:
@@ -54,12 +56,21 @@ class midiLogger:
 			midiTrack.addNote(depth, self.tree.getInstrumentAtDepth(package, self.instrumentDepth), 5)
 
 		midiTrack.writeFile(pathToWriteTo)
-	def create(self, pathToWriteTo, bpm):
+	def create(self, pathToWriteTo, bpm=120, minPitch=0, maxPitch=127):
+		"""	Create a new MIDI file based on the parsed log file.
+
+			pathToWriteTo: Where the MIDI file will be save.
+			bpm: Beats per minute in the MIDI file. Defaults to 120.
+			minPitch: The lowest pitch to be used (per line pitch is determined based on package depth). Defaults to 0.
+			maxPitch: The highest pitch to be used. Defaults to 127 (max value).
+		"""
 		self.__setUpInstrumentation()
-		self.__createMidiFile(pathToWriteTo,bpm)
+		self.__createMidiFile(pathToWriteTo,bpm, minPitch, maxPitch)
 	def setInstruments(self, packageToInstrument):
 		for key, value in packageToInstrument:
 			self.tree.setCustomInstrument(key, value)
+	def setInstrument(self, package, instrument):
+		self.tree.setCustomInstrument(package, instrument)
 
 def getPackageName(line):
 	ma = re.match(u'[^\[A-Z]*', line) #End on capital letter (class name) or after entire name.
@@ -82,7 +93,5 @@ if __name__ == '__main__':
 	logging.debug("Starting.")
 
 	parser = midiLogger(FILE_PATH, 4)
-	parser.setInstruments(instruments)
-
-	parser.create(OUTPUT_PATH, 500)
+	parser.create(OUTPUT_PATH, 500, 20, 60)
 

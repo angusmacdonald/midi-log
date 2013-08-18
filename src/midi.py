@@ -16,14 +16,22 @@ class midiFile:
 			http://www.emergentmusics.org/mididutil-class-reference
 	"""
 
-	def __init__(self, trackName, maxDepth, bpm):
+	def __init__(self, trackName, maxPackageDepth, bpm):
 		self.state = MIDIFile(1) #Number of tracks.
 		
 		self.time = 0
 		self.track = 0
 		self.state.addTempo(self.track,self.time,bpm)
-		self.maxDepth = maxDepth
-		
+		self.maxPackageDepth = maxPackageDepth
+		self.minPitch = 0	
+		self.maxPitch = 127
+
+	def setPitchRange(self, min, max):
+		""" Set the range (somewhere between 0-127) that will be used in assigning pitch to notes,
+			which is based on package depth.
+		"""
+		self.minPitch = min
+		self.maxPitch = max
 
 	def addNote(self, depth, instrument, duration):
 		"""	Adds a new note to the MIDI file.
@@ -35,7 +43,7 @@ class midiFile:
 		"""
 
 		channel = 0
-		pitch = getPitch(depth, self.maxDepth)
+		pitch = getPitch(depth, self.maxPackageDepth, self.minPitch, self.maxPitch)
 
 		volume = 127
 
@@ -55,12 +63,12 @@ class midiFile:
 		binfile.close()
 
 
-def getPitch(depth, maxDepth):
+def getPitch(depth, maxPackageDepth, minPitch, maxPitch):
 	"""	Changes pitch based on a given package structure depth
-		Pitch is between 0-127.
+		Pitch is between 0-127 (or another value specified by setPitchRange())
 	"""
-	pitch = (float(depth) / maxDepth) * 127
-	logging.debug("Pitch: {0}, Depth: {1}, Max: {2}".format(pitch, depth, maxDepth))
+	pitch = ((float(depth) / maxPackageDepth) * (maxPitch-minPitch)) + minPitch
+	logging.info("Pitch: {0}, Depth: {1}, Max Package: {2}, Min: {3}, Max: {4}".format(pitch, depth, maxPackageDepth, minPitch, maxPitch))
 	return pitch
 
 
