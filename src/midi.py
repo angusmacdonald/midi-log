@@ -25,19 +25,21 @@ class midiFile:
 		self.maxDepth = maxDepth
 		
 
-	def addNote(self, depth, instrument):
+	def addNote(self, depth, instrument, duration):
 		"""	Adds a new note to the MIDI file.
 			Increments the time by 1 on addition of every note.
 
 			depth: Package structure depth. Used to determine the pitch of the note.
+			instrument: Number from 0-127 (see: http://en.wikipedia.org/wiki/General_MIDI#Program_change_events)
+			duration: Number of beats note should be played over.
 		"""
 
 		channel = 0
 		pitch = getPitch(depth, self.maxDepth)
-		duration = 1
+
 		volume = 127
 
-		logging.info("Adding note, with instrument {0}".format(instrument))
+		logging.info("Adding note, with instrument {0}, pitch {1}, duration {2}".format(instrument, pitch, duration))
 		self.state.addProgramChange(self.track,channel, self.time, instrument)
 		self.state.addNote(0,channel,pitch,self.time,duration,volume)
 

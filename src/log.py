@@ -32,6 +32,7 @@ class midiLogger:
 			package = getPackageName(line)
 
 			self.tree.add(package)
+		self.tree.printState()
 	def __createMidiFile(self, pathToWriteTo, bpm):
 		FILE = open(FILE_PATH, 'r')
 
@@ -50,7 +51,7 @@ class midiLogger:
 
 			depth = tree.getDepth(package)
 
-			midiTrack.addNote(depth, self.tree.getInstrumentAtDepth(package, self.instrumentDepth))
+			midiTrack.addNote(depth, self.tree.getInstrumentAtDepth(package, self.instrumentDepth), 5)
 
 		midiTrack.writeFile(pathToWriteTo)
 	def create(self, pathToWriteTo, bpm):
@@ -77,7 +78,7 @@ if __name__ == '__main__':
 
 	logging.debug("Starting.")
 
-	parser = midiLogger(FILE_PATH, 2)
+	parser = midiLogger(FILE_PATH, 4)
 
-	parser.create(OUTPUT_PATH, 100)
+	parser.create(OUTPUT_PATH, 500)
 
